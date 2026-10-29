@@ -12,8 +12,12 @@ if [ $(uname -s) = "Linux" ]; then
   sudo apt-get install -y --no-install-recommends \
        git wget ca-certificates make m4 \
        gcc patch unzip libgtk2.0-dev \
-       valac libgtksourceview2.0-dev \
-       ninja-build
+       valac ninja-build
+  if [ "${1}" = "add_focal_repository" ]; then
+    sudo add-apt-repository -y "deb http://mirrors.kernel.org/ubuntu/ focal universe"
+    sudo apt-get update
+  fi
+  sudo apt-get install -y --no-install-recommends libgtksourceview2.0-dev
 
 elif [ $(uname -s) = "Darwin" ]; then
   #brew update
@@ -33,8 +37,13 @@ elif [ $(uname -s) = "Darwin" ]; then
   brewinstall gtk+
   # brewinstall gtksourceview
   brewinstall oras
-  oras pull ghcr.io/homebrew/core/gtksourceview:2.10.5_7@sha256:368413983346081e277782a5df7ac4b9e9ad1adce149fa7028fa6d99e809b7ae
-  brew install ./gtksourceview--2.10.5_7.monterey.bottle.tar.gz
+  if [ "$(uname -m)" = "x86_64" ]; then
+    oras pull ghcr.io/homebrew/core/gtksourceview:2.10.5_7@sha256:8ffbbf1fedbe9fa3be634e02c5f9eca4106ff742a1d80b51b75b1582067d2589
+    brew install ./gtksourceview--2.10.5_7.sonoma.bottle.tar.gz
+  else
+    oras pull ghcr.io/homebrew/core/gtksourceview:2.10.5_7@sha256:3ba411d8b2d8c2e2549f03262bb8e2c2e6d3824efb2d3f5a9e99efc6c0eefd0b
+    brew install ./gtksourceview--2.10.5_7.arm64_sonoma.bottle.tar.gz
+  fi
   brewinstall vala
   brewinstall ninja
   
