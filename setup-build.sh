@@ -38,11 +38,11 @@ elif [ $(uname -s) = "Darwin" ]; then
   # brewinstall gtksourceview
   brewinstall oras
   if [ "$(uname -m)" = "x86_64" ]; then
-    oras pull ghcr.io/homebrew/core/gtksourceview:2.10.5_7@sha256:8ffbbf1fedbe9fa3be634e02c5f9eca4106ff742a1d80b51b75b1582067d2589
-    HOMEBREW_DEVELOPER=1 HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 brew install ./gtksourceview--2.10.5_7.sonoma.bottle.tar.gz
+    oras pull ghcr.io/homebrew/core/gtksourceview:2.10.5_7@sha256:368413983346081e277782a5df7ac4b9e9ad1adce149fa7028fa6d99e809b7ae
+    HOMEBREW_DEVELOPER=1 HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 brew install ./gtksourceview--2.10.5_7.monterey.bottle.tar.gz
   else
-    oras pull ghcr.io/homebrew/core/gtksourceview:2.10.5_7@sha256:3ba411d8b2d8c2e2549f03262bb8e2c2e6d3824efb2d3f5a9e99efc6c0eefd0b
-    HOMEBREW_DEVELOPER=1 HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 brew install ./gtksourceview--2.10.5_7.arm64_sonoma.bottle.tar.gz
+    oras pull ghcr.io/homebrew/core/gtksourceview:2.10.5_7@sha256:0511545c79d16ff872f2bbc931abcdd5c1b4f3d70b71064f7d59989f68c8c073
+    HOMEBREW_DEVELOPER=1 HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK=1 brew install ./gtksourceview--2.10.5_7.arm64_monterey.bottle.tar.gz
   fi
   brewinstall vala
   brewinstall ninja
