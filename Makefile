@@ -182,12 +182,12 @@ clean::
 
 # ---- Z3 ----
 
-Z3_VERSION=4.8.5
+Z3_VERSION=4.13.4
 Z3_BINARY=$(PREFIX)/bin/z3
-Z3_DIR=z3-Z3-$(Z3_VERSION)
+Z3_DIR=z3-z3-$(Z3_VERSION)
 
 z3-$(Z3_VERSION).tar.gz:
-	./download z3-$(Z3_VERSION).tar.gz https://github.com/Z3Prover/z3/archive/Z3-$(Z3_VERSION).tar.gz 4e8e232887ddfa643adb6a30dcd3743cb2fa6591735fbd302b49f7028cdc0363
+	./download z3-$(Z3_VERSION).tar.gz https://github.com/Z3Prover/z3/archive/z3-$(Z3_VERSION).tar.gz 4071977e66e9f3d239b7b098ceddfe62ffdf3c71e345e9524a4a5001d1f4adf3
 
 $(Z3_DIR): z3-$(Z3_VERSION).tar.gz
 	tar xzf z3-$(Z3_VERSION).tar.gz
