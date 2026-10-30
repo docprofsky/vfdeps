@@ -1,6 +1,6 @@
 PATH:=$(PREFIX)/bin:$(PATH)
 
-all: ocaml findlib num ocamlbuild camlp-streams camlp4 lablgtk z3 csexp dune sexplib0 base res stdio cppo ocplib-endian stdint result capnp capnp-ocaml stdlib-shims ocaml-compiler-libs ppx_derivers ppxlib ppx_parser
+all: ocaml findlib zarith ocamlbuild camlp-streams camlp4 lablgtk z3 csexp dune sexplib0 base res stdio cppo ocplib-endian stdint result capnp capnp-ocaml stdlib-shims ocaml-compiler-libs ppx_derivers ppxlib ppx_parser
 
 # ---- OCaml ----
 
@@ -56,25 +56,25 @@ findlib: $(FINDLIB_BINARY)
 clean::
 	-rm -Rf findlib-$(FINDLIB_VERSION)
 
-# ---- Num ----
+# ---- Zarith ----
 
-NUM_VERSION=1.4
-NUM_BINARY=$(PREFIX)/lib/ocaml/nums.cmxa
+ZARITH_VERSION=1.14
+ZARITH_BINARY=$(PREFIX)/lib/ocaml/zarith.cmxa
 
-num-$(NUM_VERSION).tar.gz:
-	./download num-$(NUM_VERSION).tar.gz https://github.com/ocaml/num/archive/v$(NUM_VERSION).tar.gz 015088b68e717b04c07997920e33c53219711dfaf36d1196d02313f48ea00f24
+zarith-$(ZARITH_VERSION).tar.gz:
+	./download zarith-$(ZARITH_VERSION).tar.gz https://github.com/ocaml/Zarith/archive/release-$(ZARITH_VERSION).tar.gz 5db9dcbd939153942a08581fabd846d0f3f2b8c67fe68b855127e0472d4d1859
 
-num-$(NUM_VERSION): num-$(NUM_VERSION).tar.gz
-	tar xzf num-$(NUM_VERSION).tar.gz
+zarith-$(ZARITH_VERSION): zarith-$(ZARITH_VERSION).tar.gz
+	tar xzf zarith-$(ZARITH_VERSION).tar.gz
 
-$(NUM_BINARY): $(FINDLIB_BINARY) | num-$(NUM_VERSION)
-	cd num-$(NUM_VERSION) && make all && make install
+$(ZARITH_BINARY): $(FINDLIB_BINARY) | zarith-$(ZARITH_VERSION)
+	cd Zarith-release-$(ZARITH_VERSION) && ./configure && make all && make install
 
-num: $(NUM_BINARY)
-.PHONY: num
+zarith: $(ZARITH_BINARY)
+.PHONY: zarith
 
 clean::
-	-rm -Rf num-$(NUM_VERSION)
+	-rm -Rf zarith-$(ZARITH_VERSION)
 
 # ---- ocamlbuild ----
 
