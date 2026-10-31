@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
 set -e # Stop as soon as a command fails.
 set -x # Print what is being executed.
