@@ -16,8 +16,8 @@ ocaml-$(OCAML_VERSION): ocaml-$(OCAML_VERSION).tar.gz
 $(OCAML_BINARY): | ocaml-$(OCAML_VERSION)
 	cd ocaml-$(OCAML_VERSION) && \
         ./configure -prefix $(PREFIX) && \
-        make && \
-        make install
+        $(MAKE) && \
+        $(MAKE) install
 
 ocaml: $(OCAML_BINARY)
 .PHONY: ocaml
@@ -46,9 +46,9 @@ findlib-$(FINDLIB_VERSION)/Makefile.config: $(OCAML_BINARY) | findlib-$(FINDLIB_
 
 $(FINDLIB_BINARY): findlib-$(FINDLIB_VERSION)/Makefile.config
 	cd findlib-$(FINDLIB_VERSION) && \
-        make all && \
-        make opt && \
-        make install
+        $(MAKE) all && \
+        $(MAKE) opt && \
+        $(MAKE) install
 
 findlib: $(FINDLIB_BINARY)
 .PHONY: findlib
@@ -68,7 +68,7 @@ num-$(NUM_VERSION): num-$(NUM_VERSION).tar.gz
 	tar xzf num-$(NUM_VERSION).tar.gz
 
 $(NUM_BINARY): $(FINDLIB_BINARY) | num-$(NUM_VERSION)
-	cd num-$(NUM_VERSION) && make all && make install
+	cd num-$(NUM_VERSION) && $(MAKE) all && $(MAKE) install
 
 num: $(NUM_BINARY)
 .PHONY: num
@@ -89,7 +89,7 @@ ocamlbuild-$(OCAMLBUILD_VERSION): ocamlbuild-$(OCAMLBUILD_VERSION).tar.gz
 
 $(OCAMLBUILD_BINARY): $(FINDLIB_BINARY) | ocamlbuild-$(OCAMLBUILD_VERSION)
 	cd ocamlbuild-$(OCAMLBUILD_VERSION) && \
-        make configure && make && make install
+        $(MAKE) configure && $(MAKE) && $(MAKE) install
 
 ocamlbuild: $(OCAMLBUILD_BINARY)
 .PHONY: ocamlbuild
@@ -108,7 +108,7 @@ dune-$(DUNE_VERSION): dune-$(DUNE_VERSION).tar.gz
 	tar xzf $<
 
 $(DUNE_BINARY): $(OCAML_BINARY) $(FINDLIB_BINARY) | dune-$(DUNE_VERSION)
-	cd $| && ./configure --libdir=$(PREFIX)/lib/ocaml && make release && make install
+	cd $| && ./configure --libdir=$(PREFIX)/lib/ocaml && $(MAKE) release && $(MAKE) install
 
 dune: $(DUNE_BINARY)
 .PHONY: dune
@@ -151,7 +151,7 @@ $(CAMLP4_DIR): $(CAMLP4_DIR).tar.gz
 
 $(CAMLP4_BINARY): $(OCAMLBUILD_BINARY) $(CAMLP_STREAMS_BINARY) $(CAMLP_STREAMS_BINARY) | $(CAMLP4_DIR)
 	cd $(CAMLP4_DIR) && \
-        ./configure && make all && make install
+        ./configure && $(MAKE) all && $(MAKE) install
 
 camlp4: $(CAMLP4_BINARY)
 .PHONY: camlp4
@@ -172,7 +172,7 @@ lablgtk-$(LABLGTK_VERSION): lablgtk-$(LABLGTK_VERSION).tar.gz
 
 $(LABLGTK_BINARY): $(FINDLIB_BINARY) | lablgtk-$(LABLGTK_VERSION)
 	cd lablgtk-$(LABLGTK_VERSION) && \
-        ./configure --prefix=$(PREFIX) && make world && make install
+        ./configure --prefix=$(PREFIX) && $(MAKE) world && $(MAKE) install
 
 lablgtk: $(LABLGTK_BINARY)
 .PHONY: lablgtk
@@ -195,7 +195,7 @@ $(Z3_DIR): z3-$(Z3_VERSION).tar.gz
 $(Z3_BINARY): $(FINDLIB_BINARY) $(NUM_BINARY) | $(Z3_DIR)
 	cd $(Z3_DIR) && \
         python3 scripts/mk_make.py --ml --prefix=$(PREFIX) && \
-        cd build && make && make install
+        cd build && $(MAKE) && $(MAKE) install
 
 z3: $(Z3_BINARY)
 .PHONY: z3
