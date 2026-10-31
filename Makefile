@@ -1,6 +1,6 @@
 PATH:=$(PREFIX)/bin:$(PATH)
 
-all: ocaml findlib num ocamlbuild camlp-streams camlp4 lablgtk z3 csexp dune sexplib0 base res stdio cppo ocplib-endian stdint result capnp capnp-ocaml stdlib-shims ocaml-compiler-libs ppx_derivers ppxlib ppx_parser
+all: ocaml findlib num ocamlbuild camlp-streams lablgtk z3 csexp dune sexplib0 base res stdio cppo ocplib-endian stdint result capnp capnp-ocaml stdlib-shims ocaml-compiler-libs ppx_derivers ppxlib ppx_parser
 
 # ---- OCaml ----
 
@@ -136,28 +136,6 @@ camlp-streams: $(CAMLP_STREAMS_BINARY)
 
 clean::
 	-rm -Rf camlp-streams-$(CAMLP_STREAMS_VERSION)
-
-# ---- camlp4 ----
-
-CAMLP4_VERSION:=4.14+1
-CAMLP4_DIR:=camlp4-$(subst +,-,$(CAMLP4_VERSION))
-CAMLP4_BINARY:=$(PREFIX)/bin/camlp4o
-
-$(CAMLP4_DIR).tar.gz:
-	./download $(CAMLP4_DIR).tar.gz https://github.com/ocaml/camlp4/archive/$(CAMLP4_VERSION).tar.gz 553b6805dffc05eb4749b0293df47a18b82b9d9dcc125d688e55f13cbec0b93a
-
-$(CAMLP4_DIR): $(CAMLP4_DIR).tar.gz
-	tar xzf $(CAMLP4_DIR).tar.gz
-
-$(CAMLP4_BINARY): $(OCAMLBUILD_BINARY) $(CAMLP_STREAMS_BINARY) $(CAMLP_STREAMS_BINARY) | $(CAMLP4_DIR)
-	cd $(CAMLP4_DIR) && \
-        ./configure && $(MAKE) all && $(MAKE) install
-
-camlp4: $(CAMLP4_BINARY)
-.PHONY: camlp4
-
-clean::
-	-rm -Rf $(CAMLP4_DIR)
 
 # ---- lablgtk ----
 
