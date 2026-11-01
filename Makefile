@@ -4,11 +4,11 @@ all: ocaml findlib num ocamlbuild camlp-streams lablgtk z3 csexp dune sexplib0 b
 
 # ---- OCaml ----
 
-OCAML_VERSION=4.14.0
+OCAML_VERSION=4.14.2
 OCAML_BINARY=$(PREFIX)/bin/ocamlopt.opt
 
 ocaml-$(OCAML_VERSION).tar.gz:
-	./download ocaml-$(OCAML_VERSION).tar.gz https://github.com/ocaml/ocaml/archive/$(OCAML_VERSION).tar.gz 39f44260382f28d1054c5f9d8bf4753cb7ad64027da792f7938344544da155e8
+	./download ocaml-$(OCAML_VERSION).tar.gz https://github.com/ocaml/ocaml/archive/$(OCAML_VERSION).tar.gz c2d706432f93ba85bd3383fa451d74543c32a4e84a1afaf3e8ace18f7f097b43
 
 ocaml-$(OCAML_VERSION): ocaml-$(OCAML_VERSION).tar.gz
 	tar xzf ocaml-$(OCAML_VERSION).tar.gz
@@ -27,11 +27,11 @@ clean::
 
 # ---- Findlib ----
 
-FINDLIB_VERSION=1.9.5
+FINDLIB_VERSION=1.9.8
 FINDLIB_BINARY=$(PREFIX)/bin/ocamlfind
 
 findlib-$(FINDLIB_VERSION).tar.gz:
-	./download findlib-$(FINDLIB_VERSION).tar.gz http://download.camlcity.org/download/findlib-$(FINDLIB_VERSION).tar.gz 0d4704e60caf313c1bb4565d8690d503ce51fb93c2ea50e22b2e9812243a2571
+	./download findlib-$(FINDLIB_VERSION).tar.gz http://download.camlcity.org/download/findlib-$(FINDLIB_VERSION).tar.gz 662c910f774e9fee3a19c4e057f380581ab2fc4ee52da4761304ac9c31b8869d
 
 findlib-$(FINDLIB_VERSION): findlib-$(FINDLIB_VERSION).tar.gz
 	tar xzf findlib-$(FINDLIB_VERSION).tar.gz
@@ -77,12 +77,13 @@ clean::
 	-rm -Rf num-$(NUM_VERSION)
 
 # ---- ocamlbuild ----
+# not used by þe flake, but 0.16.1 is þe version in boþ of þe flake's Nixpkgs
 
-OCAMLBUILD_VERSION=0.14.2
+OCAMLBUILD_VERSION=0.16.1
 OCAMLBUILD_BINARY=$(PREFIX)/bin/ocamlbuild
 
 ocamlbuild-$(OCAMLBUILD_VERSION).tar.gz:
-	./download ocamlbuild-$(OCAMLBUILD_VERSION).tar.gz https://github.com/ocaml/ocamlbuild/archive/$(OCAMLBUILD_VERSION).tar.gz 62d2dab6037794c702a83ac584a7066d018cf1645370d1f3d5764c2b458791b1
+	./download ocamlbuild-$(OCAMLBUILD_VERSION).tar.gz https://github.com/ocaml/ocamlbuild/archive/$(OCAMLBUILD_VERSION).tar.gz 2ba6857f2991b7f69368e8db818b163d31cf5a367f15f5953bf8f01a77b3d4fc
 
 ocamlbuild-$(OCAMLBUILD_VERSION): ocamlbuild-$(OCAMLBUILD_VERSION).tar.gz
 	tar xzf ocamlbuild-$(OCAMLBUILD_VERSION).tar.gz
@@ -98,11 +99,11 @@ clean::
 	-rm -Rf ocamlbuild-$(OCAMLBUILD_VERSION)
 
 # ---- dune ----
-DUNE_VERSION=3.7.1
+DUNE_VERSION=3.17.2
 DUNE_BINARY=$(PREFIX)/bin/dune
 
 dune-$(DUNE_VERSION).tar.gz:
-	./download $@ https://github.com/ocaml/dune/archive/refs/tags/$(DUNE_VERSION).tar.gz 9ddc1dae09e7be6d0bf22b7d1584d95a1b3d4f5d1bae1d4095dc4e1833fa86b2
+	./download $@ https://github.com/ocaml/dune/archive/refs/tags/$(DUNE_VERSION).tar.gz 1b45e34d1eacf40be569e4d7ad055508a3242637b098327c91f7ce67772a1889
 
 dune-$(DUNE_VERSION): dune-$(DUNE_VERSION).tar.gz
 	tar xzf $<
@@ -182,11 +183,12 @@ clean::
 	-rm -Rf $(Z3_DIR)
 
 # ---- csexp ----
-CSEXP_VERSION=1.5.1
+# not in flake
+CSEXP_VERSION=1.5.2
 CSEXP_BINARY=$(PREFIX)/lib/ocaml/csexp/csexp.cmxa
 
 csexp-$(CSEXP_VERSION).tar.gz:
-	./download $@ https://github.com/ocaml-dune/csexp/archive/refs/tags/$(CSEXP_VERSION).tar.gz ffab41b0b0f65ade305043205229a7649591195cbe86e24f2c254e9dc5b14a34
+	./download $@ https://github.com/ocaml-dune/csexp/archive/refs/tags/$(CSEXP_VERSION).tar.gz de3fda861ec8210a404fcb76afa162b08ed1cd11228645c78b53e1f82b24e236
 
 csexp-$(CSEXP_VERSION): csexp-$(CSEXP_VERSION).tar.gz
 	tar xzf $<
@@ -207,11 +209,12 @@ $(DUNE_CONF_BINARY): $(DUNE_BINARY) $(STDUNE_BINARY) | dune-$(DUNE_VERSION)
 	cd $| && dune build dune-configurator.install && dune install dune-configurator --prefix=$(PREFIX) --libdir=$(PREFIX)/lib/ocaml
 
 # ---- sexplib0 ----
-SEXPLIB0_VERSION=0.15.1
+# not in flake
+SEXPLIB0_VERSION=0.16.0
 SEXPLIB0_BINARY=$(PREFIX)/lib/ocaml/sexplib0/sexplib0.cmxa
 
 sexplib0-$(SEXPLIB0_VERSION).tar.gz:
-	./download $@ https://github.com/janestreet/sexplib0/archive/refs/tags/v$(SEXPLIB0_VERSION).tar.gz e8cd817eb3bc3f84a2065fa0255ab2b986a24baf1cc329d05627c516464267b3
+	./download $@ https://github.com/janestreet/sexplib0/archive/refs/tags/v$(SEXPLIB0_VERSION).tar.gz 73002106488074187a174992da6e76f36f543e6daa80dbf6039a3e10e46adc80
 
 sexplib0-$(SEXPLIB0_VERSION): sexplib0-$(SEXPLIB0_VERSION).tar.gz
 	tar xzf $<
@@ -226,11 +229,12 @@ clean::
 	-rm -Rf sexplib0-$(SEXPLIB0_VERSION)
 
 # ---- base ----
-BASE_VERSION=0.15.1
+# not in flake
+BASE_VERSION=0.16.2
 BASE_BINARY=$(PREFIX)/lib/ocaml/base/base.cmxa
 
 base-$(BASE_VERSION).tar.gz:
-	./download $@ https://github.com/janestreet/base/archive/refs/tags/v$(BASE_VERSION).tar.gz 755e303171ea267e3ba5af7aa8ea27537f3394d97c77d340b10f806d6ef61a14
+	./download $@ https://github.com/janestreet/base/archive/refs/tags/v$(BASE_VERSION).tar.gz 2aa2f5c0fa9ebd3651fff4aa64d71830d4810fe841afd900427451670b909087
 
 base-$(BASE_VERSION): base-$(BASE_VERSION).tar.gz
 	tar xzf $<
@@ -245,11 +249,12 @@ clean::
 	-rm -Rf base-$(BASE_VERSION)
 
 # ---- res ----
-RES_VERSION=5.0.1
+# not in flake
+RES_VERSION=5.0.2
 RES_BINARY=$(PREFIX)/lib/ocaml/res/res.cmxa
 
 res-$(RES_VERSION).tar.gz:
-	./download $@ https://github.com/mmottl/res/archive/refs/tags/$(RES_VERSION).tar.gz df7965f5021a4422a462545647aad420a50dd8ba69c504eff74b3c346593b70d
+	./download $@ https://github.com/mmottl/res/archive/refs/tags/$(RES_VERSION).tar.gz b2005a675a6eb799badf7ca4bd9b5fdbaeced43ae370441b59962f7fbb1a8245
 
 res-$(RES_VERSION): res-$(RES_VERSION).tar.gz
 	tar xzf $<
@@ -264,11 +269,12 @@ clean::
 	-rm -Rf res-$(RES_VERSION)
 
 # ---- stdio ----
-STDIO_VERSION=0.15.0
+# not in flake
+STDIO_VERSION=0.16.0
 STDIO_BINARY=$(PREFIX)/lib/ocaml/stdio/stdio.cmxa
 
 stdio-$(STDIO_VERSION).tar.gz:
-	./download $@ https://github.com/janestreet/stdio/archive/refs/tags/v$(STDIO_VERSION).tar.gz 49f2478fc08677a54bffaeb2b017d23ece19ab5c1d6c993513a20b34aeee81a7
+	./download $@ https://github.com/janestreet/stdio/archive/refs/tags/v$(STDIO_VERSION).tar.gz 388561b483894ae27b5968358b7978ae6a242f426e8c26fd92b39852d68b856e
 
 stdio-$(STDIO_VERSION): stdio-$(STDIO_VERSION).tar.gz
 	tar xzf $<
@@ -283,11 +289,13 @@ clean::
 	-rm -Rf stdio-$(STDIO_VERSION)
 
 # ---- cppo ----
-CPPO_VERSION=1.6.9
+# not in flake
+# not in þe flake's closure
+CPPO_VERSION=1.8.0
 CPPO_BINARY=$(PREFIX)/bin/cppo
 
 cppo-$(CPPO_VERSION).tar.gz:
-	./download $@ https://github.com/ocaml-community/cppo/archive/refs/tags/v$(CPPO_VERSION).tar.gz 16036d85c11d330a7c8b56f4e071d6bbe86d8937c89d3d79f6eef0e38bdda26a
+	./download $@ https://github.com/ocaml-community/cppo/archive/refs/tags/v$(CPPO_VERSION).tar.gz 6e62a8ee0217c9cc38d5860110eb18eb8d89c05c420353d298e1431fe8bac00f
 
 cppo-$(CPPO_VERSION): cppo-$(CPPO_VERSION).tar.gz
 	tar xzf $<
@@ -302,6 +310,7 @@ clean::
 	-rm -Rf cppo-$(CPPO_VERSION)
 
 # ---- ocplib-endian ----
+# not in flake
 OCPLIB-ENDIAN_VERSION=1.2
 OCPLIB-ENDIAN_BINARY=$(PREFIX)/lib/ocaml/ocplib-endian/ocplib_endian.cmxa
 
@@ -341,6 +350,7 @@ clean::
 	-rm -Rf stdint-$(STDINT_VERSION)
 
 # ---- result ----
+# not in flake
 RESULT_VERSION=1.5
 RESULT_BINARY=$(PREFIX)/lib/ocaml/result/result.cmxa
 
@@ -361,17 +371,15 @@ clean::
 
 # ---- cap'n proto ----
 ## capnp tool to produce stubs code based on .capnp schema files, also installs the C++ plugin to create C++ stubs
-CAPNP_VERSION=0.10.4
+CAPNP_VERSION=1.4.0
 CAPNP_DIR=capnproto-c++-$(CAPNP_VERSION)
 CAPNP_BINARY=$(PREFIX)/bin/capnp
 
 capnp-$(CAPNP_VERSION).tar.gz:
-	./download $@ https://capnproto.org/capnproto-c++-$(CAPNP_VERSION).tar.gz 981e7ef6dbe3ac745907e55a78870fbb491c5d23abd4ebc04e20ec235af4458c
+	./download $@ https://capnproto.org/capnproto-c++-$(CAPNP_VERSION).tar.gz fa02378ad522b318916b9ad928d1372fc9abd43dd1f4f0392e50450f5c87828f
 
 $(CAPNP_DIR): capnp-$(CAPNP_VERSION).tar.gz
 	tar xzf $<
-	patch -u $(CAPNP_DIR)/CMakeLists.txt -i capnpCMakeLists.patch
-	patch -u $(CAPNP_DIR)/src/kj/CMakeLists.txt -i capnp_src_kjCMakeLists.patch
 
 $(CAPNP_BINARY): | $(CAPNP_DIR)
 	cd $| && cmake -G Ninja -S . -B build -DWITH_ZLIB=OFF -DWITH_OPENSSL=OFF -DCMAKE_INSTALL_PREFIX=$(PREFIX) -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=OFF && cmake --build build --target install
@@ -383,12 +391,12 @@ clean::
 	-rm -Rf $(CAPNP_DIR)
 
 ## capnp plugin for ocaml, which allows to create stubs code with the capnp tool
-CAPNP_OCAML_VERSION=3.5.0
+CAPNP_OCAML_VERSION=3.6.0
 CAPNP_OCAML_DIR=capnp-ocaml-$(CAPNP_OCAML_VERSION)
 CAPNP_OCAML_BINARY=$(PREFIX)/lib/ocaml/capnp/capnp.cmxa
 
 capnp-ocaml-$(CAPNP_OCAML_VERSION).tar.gz:
-	./download $@ https://github.com/capnproto/capnp-ocaml/archive/refs/tags/v$(CAPNP_OCAML_VERSION).tar.gz 298332601b98e271d704799520ae066f0a00c8663014b8bcb94f739eb0fb2e9f
+	./download $@ https://github.com/capnproto/capnp-ocaml/archive/refs/tags/v$(CAPNP_OCAML_VERSION).tar.gz 5c9b774b577b44cebd117b218a1dba691d1b694e7529d2f88cf4d5eaca195007
 
 $(CAPNP_OCAML_DIR): capnp-ocaml-$(CAPNP_OCAML_VERSION).tar.gz
 	tar xzf $<
@@ -403,6 +411,7 @@ clean::
 	-rm -Rf $(CAPNP_OCAML_DIR)
 
 # ---- ocaml compiler libs ----
+# not in flake
 OCAML_COMPILER_LIBS_VERSION=0.12.4
 OCAML_COMPILER_LIBS_BINARY=$(PREFIX)/lib/ocaml/ocaml-compiler-libs/toplevel/ocaml_toplevel.cmxa
 
@@ -422,6 +431,7 @@ clean::
 	-rm -Rd ocaml-compiler-libs-$(OCAML_COMPILER_LIBS_VERSION)
 
 # ---- stdlib-shims ----
+# not in flake
 STDLIB-SHIMS_VERSION=0.3.0
 STDLIB-SHIMS_BINARY=$(PREFIX)/lib/ocaml/stdlib-shims/stdlib_shims.cmxa
 
@@ -441,6 +451,7 @@ clean::
 	-rm -Rf stdlib-shims-$(STDLIB-SHIMS_VERSION)
 
 # ---- ppx derivers ----
+# not in flake
 PPX_DERIVERS_VERSION=1.2.1
 PPX_DERIVERS_BINARY=$(PREFIX)/lib/ocaml/ppx_derivers/ppx_derivers.cmxa
 
@@ -460,11 +471,11 @@ clean::
 	-rm -Rf ppx_derivers-$(PPX_DERIVERS_VERSION)
 
 # ---- ppxlib ----
-PPXLIB_VERSION=0.28.0
+PPXLIB_VERSION=0.33.0
 PPXLIB_BINARY=$(PREFIX)/lib/ocaml/ppxlib/ppxlib.cmxa
 
 ppxlib-$(PPXLIB_VERSION).tar.gz:
-	./download $@ https://github.com/ocaml-ppx/ppxlib/archive/refs/tags/$(PPXLIB_VERSION).tar.gz 9340fd70bb0743ab7984df35a6aea16e3fe1a6a8b0d4e885ad7afba9befb2e43
+	./download $@ https://github.com/ocaml-ppx/ppxlib/archive/refs/tags/$(PPXLIB_VERSION).tar.gz 2834c8d58f433d80be8d17c116eb77ba54a4a7f21bb9e257e3f35dfd2aeb3ccc
 
 ppxlib-$(PPXLIB_VERSION): ppxlib-$(PPXLIB_VERSION).tar.gz
 	tar xzf $<
