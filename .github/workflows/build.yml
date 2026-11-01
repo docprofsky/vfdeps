@@ -13,7 +13,7 @@ jobs:
     steps:
       - uses: actions/setup-python@v7
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - uses: actions/checkout@v7
 
@@ -79,7 +79,7 @@ jobs:
     steps:
       - uses: actions/setup-python@v7
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - uses: actions/checkout@v7
 
@@ -136,12 +136,12 @@ jobs:
           cosign sign-blob -y ARTIFACT_SHA256SUMS
 
   build_macos_aarch64:
-    runs-on: macos-14
+    runs-on: macos-15
 
     steps:
       - uses: actions/setup-python@v7
         with:
-          python-version: '3.11'
+          python-version: '3.12'
 
       - uses: actions/checkout@v7
 
