@@ -1,0 +1,86 @@
+commit 0dfbb04d0d3d5e1bd7d237dc622e5e588498f0c4
+Author: copilot-swe-agent[bot] <198982749+Copilot@users.noreply.github.com>
+Date:   Sun Feb 8 03:26:13 2026 +0000
+
+    Add -headerpad_max_install_names flag for macOS dylib builds
+    
+    Backport to Z3 4.13.4.
+    
+    This fixes the install_name_tool issue on macOS where the tool fails
+    with "larger updated load commands do not fit". The linker flag
+    -Wl,-headerpad_max_install_names ensures sufficient header padding
+    in the Mach-O binary for install_name_tool to modify install names.
+    
+    Changes made:
+    - CMake: Added flag to libz3, z3java, z3jl shared libraries on Darwin
+    - Python build: Changed flag from ML-only to all macOS builds
+    
+    Fixes #7623 (regression in 4.15.5)
+    
+    Co-authored-by: NikolajBjorner <3085284+NikolajBjorner@users.noreply.github.com>
+    (cherry picked from commit a08e8a99f9ab7ab37181eb5e2e7a5abdae916260)
+
+diff --git a/scripts/mk_util.py b/scripts/mk_util.py
+index 5296e12d8..d8c993c82 100644
+--- a/scripts/mk_util.py
++++ b/scripts/mk_util.py
+@@ -2694,6 +2694,10 @@ def mk_config():
+             CXXFLAGS = '%s -arch arm64' % CXXFLAGS
+             LDFLAGS = '%s -arch arm64' % LDFLAGS
+             SLIBEXTRAFLAGS = '%s -arch arm64' % SLIBEXTRAFLAGS
++        # Add header padding for macOS to allow install_name_tool to modify the dylib
++        # This fixes issues where install_name_tool fails with "larger updated load commands do not fit"
++        if IS_OSX:
++            SLIBFLAGS += ' -Wl,-headerpad_max_install_names'
+ 
+         config.write('PREFIX=%s\n' % PREFIX)
+         config.write('CC=%s\n' % CC)
+diff --git a/src/CMakeLists.txt b/src/CMakeLists.txt
+index 5faede21f..e50d4dc17 100644
+--- a/src/CMakeLists.txt
++++ b/src/CMakeLists.txt
+@@ -154,6 +154,14 @@ set_target_properties(libz3 PROPERTIES
+   VERSION ${Z3_VERSION}
+   SOVERSION ${Z3_VERSION_MAJOR}.${Z3_VERSION_MINOR})
+ 
++# Set macOS-specific properties for proper .dylib versioning (fixes issue #6651)
++if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
++  # Add header padding to allow install_name_tool to modify the dylib
++  # This fixes issues where install_name_tool fails with "larger updated load commands do not fit"
++  # See: https://github.com/Z3Prover/z3/issues/7623
++  target_link_options(libz3 PRIVATE "-Wl,-headerpad_max_install_names")
++endif()
++
+ if (NOT MSVC)
+   # On UNIX like platforms if we don't change the OUTPUT_NAME
+   # the library gets a name like ``liblibz3.so`` so we change it
+diff --git a/src/api/java/CMakeLists.txt b/src/api/java/CMakeLists.txt
+index c5221014f..9c8cb9c97 100644
+--- a/src/api/java/CMakeLists.txt
++++ b/src/api/java/CMakeLists.txt
+@@ -48,6 +48,10 @@ target_include_directories(z3java PRIVATE
+   "${PROJECT_BINARY_DIR}/src/api"
+   ${JNI_INCLUDE_DIRS}
+ )
++# Add header padding for macOS to allow install_name_tool to modify the dylib
++if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
++  target_link_options(z3java PRIVATE "-Wl,-headerpad_max_install_names")
++endif()
+ # FIXME: Should this library have SONAME and VERSION set?
+ 
+ # This prevents CMake from automatically defining ``z3java_EXPORTS``
+diff --git a/src/api/julia/CMakeLists.txt b/src/api/julia/CMakeLists.txt
+index fe27caa95..8d17ba8ca 100644
+--- a/src/api/julia/CMakeLists.txt
++++ b/src/api/julia/CMakeLists.txt
+@@ -7,6 +7,10 @@ target_include_directories(z3jl PRIVATE
+     "${PROJECT_BINARY_DIR}/src/api"
+     "${PROJECT_SOURCE_DIR}/src/api/c++"
+ )
++# Add header padding for macOS to allow install_name_tool to modify the dylib
++if (CMAKE_SYSTEM_NAME STREQUAL "Darwin")
++  target_link_options(z3jl PRIVATE "-Wl,-headerpad_max_install_names")
++endif()
+ 
+ option(Z3_INSTALL_JULIA_BINDINGS "Install Julia bindings when invoking install target" ON)
+ if(Z3_INSTALL_JULIA_BINDINGS)

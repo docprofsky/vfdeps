@@ -188,8 +188,9 @@ Z3_DIR=z3-z3-$(Z3_VERSION)
 z3-$(Z3_VERSION).tar.gz:
 	./download z3-$(Z3_VERSION).tar.gz https://github.com/Z3Prover/z3/archive/z3-$(Z3_VERSION).tar.gz 4071977e66e9f3d239b7b098ceddfe62ffdf3c71e345e9524a4a5001d1f4adf3
 
-$(Z3_DIR): z3-$(Z3_VERSION).tar.gz
+$(Z3_DIR): z3-$(Z3_VERSION).tar.gz Z3_headerpad.patch
 	tar xzf z3-$(Z3_VERSION).tar.gz
+	patch -d $(Z3_DIR) -p1 -ui ../Z3_headerpad.patch
 
 $(Z3_BINARY): $(FINDLIB_BINARY) $(ZARITH_BINARY) | $(Z3_DIR)
 	cd $(Z3_DIR) && \
